@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <title>IG-Repacks / Admin</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="assets/css/igstyle.css">
+  <link rel="stylesheet" href="assets/css/owl.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <link rel="icon" href="assets/images/favicon.png">
+  <script src="assets/js/firebase-init.js" type="module"></script>
+  <style>
+    .input-container input {
+      margin: 5px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 15px;
+      background-color: transparent;
+      color: rgba(255, 255, 255, 0.73);
+      /* Text color */
+      font-size: 16px;
+    }
+
+    .input-container input::placeholder {
+      color: white;
+      /* Placeholder text color */
+    }
+
+    .input-container textarea {
+      margin: 5px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 15px;
+      background-color: transparent;
+      color: rgba(255, 255, 255, 0.73);
+      /* Text color */
+      font-size: 16px;
+    }
+
+    .input-container textarea::placeholder {
+      color: white;
+      /* Placeholder text color */
+    }
+
+    .input-container {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-tabs {
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 15px;
+    }
+
+    .nav-tabs .nav-link {
+      background-color: transparent;
+      color: rgba(255, 255, 255, 0.45);
+      border: 1px solid transparent;
+      border-radius: 15px;
+      margin: 0 5px;
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.02);
+      color: white;
+      border: 1px solid white;
+    }
+
+    .nav-tabs .nav-link:hover {
+      border: 1px solid white;
+    }
+
+    .nav-item {
+      margin: 7px;
+    }
+  </style>
+  <style>
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    .table th {
+      background-color: #f2f2f2;
+    }
+
+    .table tbody {
+      color: white;
+    }
+  </style>
+
+  <style>
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1000;
+      /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgba(0, 0, 0, 0.7);
+      /* Dark background with opacity */
+    }
+
+    .modal-content {
+      background-color: #27292a;
+      /* Custom background */
+      color: white;
+      /* Text color */
+      padding: 20px;
+      width: 100%;
+      /* Width of the modal */
+      height: 100%;
+      /* Max height */
+      top: 50%;
+      overflow-y: auto;
+      /* Scrollable */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      /* Add shadow for depth */
+      position: relative;
+      /* Align vertically */
+      transform: translateY(-50%);
+      /* Adjust for true vertical centering */
+    }
+
+    .modal-header {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+
+    .modal-footer {
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+      text-align: right;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      margin: 5px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progressOverlay">
+    <div class="progress-container">
+      <div class="circle"></div>
+    </div>
+  </div>
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="index.html" class="logo">
+              <img src="assets/images/logo.png" alt="">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Search End ***** -->
+            <div class="search-input">
+              <form id="search" action="/search.html">
+                <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword"
+                  onkeypress="handle" />
+                <i class="fa fa-search"></i>
+              </form>
+            </div>
+            <!-- ***** Search End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav" style="place-content: space-evenly;">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="browse.html">Games</a></li>
+              <li><a href="https://www.facebook.com/iraqighost9393">Subscribe</a></li>
+              <li><a id="accountBtn" href="login.html">Login <img src="assets/images/profile-header.jpg" alt=""></a>
+              </li>
+              </li>
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <script>
+    if (localStorage.getItem("user")) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      document.getElementById("accountBtn").innerHTML = document.getElementById("accountBtn").innerHTML.replaceAll("Login", user.name);
+    }
+  </script>
+  <!-- ***** Header Area End ***** -->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="page-content">
+          <div style="margin-top: 0px;" class="most-popular">
+            <div class="row" style="display: none;" id="pageContents">
+              <div class="col-lg-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="games-tab" data-bs-toggle="tab" href="#games" role="tab"
+                      aria-controls="games" aria-selected="true">Games</a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="accounts-tab" data-bs-toggle="tab" href="#accounts" role="tab"
+                      aria-controls="accounts" aria-selected="false">Accounts</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="games" role="tabpanel" aria-labelledby="games-tab">
+                    <div class="heading-section" style="margin-top: 10px;">
+                      <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>Games</h4>
+                        <button id="openModal"
+                          style="margin-bottom: 30px;background: #ff000000;border-radius: 100px;color: white;padding-left: 14px;padding-right: 14px;">Add
+                          game</button>
+                      </div>
+                      <div class="row" id="game-container">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="accounts" role="tabpanel" aria-labelledby="accounts-tab">
+                    <div class="heading-section" style="margin-top: 10px;">
+                      <h4>Accounts</h4>
+                      <div class="container">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Premium</th>
+                              <th>Expire Date</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody id="userTableBody">
+                            <!-- User rows will be populated here -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Add New Game</h5>
+        <button id="closeModal" style="background: none; border: none; color: white; cursor: pointer;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="input-container">
+          <input id="postName" type="text" placeholder="Game Name *" required>
+          <input id="postCover" type="text" placeholder="Game Cover *" required>
+          <input id="postYoutube" type="text" placeholder="Game Trailer" required>
+          <input id="postStatus" type="text" placeholder="Game Status" required>
+          <input id="postRating" type="text" placeholder="Game Rating" required>
+          <input id="postSize" type="text" placeholder="Game Size *" required>
+          <input id="postGenre" type="text" placeholder="Game Type *" required>
+          <input id="postBk1" type="text" placeholder="Game Screen 1" required>
+          <input id="postBk2" type="text" placeholder="Game Screen 2" required>
+          <input id="postBk3" type="text" placeholder="Game Screen 3" required>
+          <textarea style="min-height: 200px;" id="postInfo" placeholder="Game Info *" required></textarea>
+          <input id="postLink" type="text" placeholder="Game Download link *" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="closeModalFooter" class="btn btn-secondary">Close</button>
+        <button id="deleteBtns" onclick="deleteGame();" class="btn btn-primary"
+          style="background-color: red;">Delete Game</button>
+        <button id="saveBtns" onclick="uploadGameData();" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get modal elements
+    const modal = document.getElementById('myModal');
+    const openModalBtn = document.getElementById('openModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const closeModalFooterBtn = document.getElementById('closeModalFooter');
+
+    // Open modal function
+    openModalBtn.onclick = function () {
+      document.getElementById('deleteBtns').style.display = "none";
+      document.getElementById('saveBtns').innerHTML = document.getElementById('saveBtns').innerHTML.replaceAll("Update changes", "Save changes");
+      document.getElementById('postName').value = "";
+      document.getElementById('postCover').value = "";
+      document.getElementById('postYoutube').value = "";
+      document.getElementById('postStatus').value = "";
+      document.getElementById('postRating').value = "";
+      document.getElementById('postSize').value = "";
+      document.getElementById('postGenre').value = "";
+      document.getElementById('postBk1').value = "";
+      document.getElementById('postBk2').value = "";
+      document.getElementById('postBk3').value = "";
+      document.getElementById('postInfo').value = "";
+      document.getElementById('postLink').value = "";
+      window.updateGame = false;
+      modal.style.display = "block";
+    }
+
+    // Close modal function
+    closeModalBtn.onclick = closeModal;
+    closeModalFooterBtn.onclick = closeModal;
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+
+    function openMdl() {
+      const modal = document.getElementById('myModal');
+      const openModalBtn = document.getElementById('openModal');
+      const closeModalBtn = document.getElementById('closeModal');
+      const closeModalFooterBtn = document.getElementById('closeModalFooter');
+      document.getElementById('saveBtns').innerHTML = document.getElementById('saveBtns').innerHTML.replaceAll("Save changes", "Update changes");
+      document.getElementById('deleteBtns').style.display = "block";
+      modal.style.display = "block";
+
+      closeModalBtn.onclick = closeModal;
+      closeModalFooterBtn.onclick = closeModal;
+
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function (event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      }
+    }
+  </script>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Copyright © <span id="currentYear"></span> <a href="#">IG-Repacks</a>
+            <br>Design: <a href="https://fb.com/noabrahemno" target="_blank" title="ibrahim khalid">Ibrahim Khalid</a>
+          </p>
+        </div>
+
+        <script>
+          const year = new Date().getFullYear();
+          document.getElementById('currentYear').textContent = year;
+        </script>
+
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="assets/js/isotope.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/tabs.js"></script>
+  <script src="assets/js/popup.js"></script>
+  <script src="assets/js/custom.js?v=2"></script>
+
+  <script type="module">
+    showProgressCircle();
+    import {
+      getFirestore,
+      getDoc,
+      doc,
+      collection,
+      getDocs,
+      updateDoc,
+      setDoc,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    const db = getFirestore();
+
+    async function checkIfAdmin(userId) {
+      const userDocRef = doc(db, 'users', userId); // Reference to the user document
+      const userDoc = await getDoc(userDocRef); // Fetch the user document
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        return userData.admin || false;
+      } else {
+        return false;
+      }
+    }
+
+    let user = JSON.parse('{}');
+    if (localStorage.getItem("user")) {
+      user = JSON.parse(localStorage.getItem("user"));
+      const userId = user.uid;
+      checkIfAdmin(userId).then(isAdmin => {
+        if (isAdmin) {
+          document.getElementById("pageContents").style.display = "block";
+          console.log("User is an admin.");
+        } else {
+          window.location.href = "/";
+        }
+        hideProgressCircle();
+      }).catch(error => {
+        window.location.href = "/";
+        hideProgressCircle();
+      });
+    } else {
+      window.location.href = "login.html";
+    }
+
+    async function fetchGamesData() {
+      const gamesCollection = collection(db, 'games');
+      const gamesSnapshot = await getDocs(gamesCollection);
+
+      const gamesList = [];
+      gamesSnapshot.forEach((doc) => {
+        gamesList.push({
+          id: doc.id, // Document ID
+          ...doc.data() // Document data
+        });
+      });
+
+      return gamesList; // Return the games list
+    }
+
+    async function fetchAllUsers() {
+      user = JSON.parse(localStorage.getItem("user"));
+      const userId = user.uid;
+
+      if (!userId) {
+        window.location.href = "/";
+      }
+
+      const userDoc = await getDoc(doc(db, 'users', userId));
+      if (!userDoc.exists() || !userDoc.data().admin) {
+        return []; // Return empty if not an admin
+      }
+
+      const usersCollection = collection(db, 'users');
+      const usersSnapshot = await getDocs(usersCollection);
+
+      const usersList = [];
+      usersSnapshot.forEach((doc) => {
+        usersList.push({
+          id: doc.id, // Document ID
+          ...doc.data() // User data
+        });
+      });
+
+      return usersList; // Return the list of users
+    }
+
+    async function loadData() {
+      try {
+        const games = await fetchGamesData();
+        gameList(games);
+        const users = await fetchAllUsers();
+        populateUserTable(users);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    loadData();
+
+    function gameList(games) {
+      const gameContainer = document.getElementById('game-container');
+      gameContainer.innerHTML = '';
+      games.forEach(user => {
+        const gameItem = createGameItem(user.cover, user.name, user.status, user.rating, user.size, user.id, user);
+        gameContainer.appendChild(gameItem);
+      });
+    }
+
+    function populateUserTable(users) {
+      const userTableBody = document.getElementById('userTableBody');
+      userTableBody.innerHTML = ''; // Clear existing rows
+
+      users.forEach(user => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>
+                    <select id="premium-${user.id}">
+                        <option value="true" ${user.premium ? 'selected' : ''}>True</option>
+                        <option value="false" ${!user.premium ? 'selected' : ''}>False</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="date" id="expire-${user.id}" value="${user.expire}">
+                </td>
+                <td>
+                    <button onclick="updateUser('${user.id}', '${user.name}')">Save</button>
+                </td>
+            `;
+
+        userTableBody.appendChild(row);
+      });
+    }
+
+    // Example update function
+    async function updateUser(uid, name) {
+      showProgressCircle();
+      user = JSON.parse(localStorage.getItem("user"));
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists() || !userDoc.data().admin) {
+        alert("You do not have permission to update users.");
+        return; // Exit if not admin
+      }
+
+      const premium = document.getElementById(`premium-${uid}`).value === 'true';
+      const expireDate = document.getElementById(`expire-${uid}`).value;
+
+      // Perform your Firestore update here
+      console.log(`Updating user ${uid}: premium=${premium}, expireDate=${expireDate}`);
+
+      try {
+        const userDocRef = doc(db, 'users', uid);
+        await updateDoc(userDocRef, { premium, expire: expireDate });
+        alert(`User ${name} updated successfully!`);
+        hideProgressCircle();
+      } catch (error) {
+        console.error("Error updating user:", error);
+        alert("Failed to update user. Please try again.");
+        hideProgressCircle();
+      }
+    }
+
+    async function deleteGame() {
+      if (!window.updateGameId) {
+        alert("No game selected for deletion.");
+        return;
+      }
+
+      const confirmDelete = confirm("Are you sure you want to delete this game?");
+      if (!confirmDelete) {
+        return;
+      }
+
+      try {
+        // Create a reference to the game document you want to delete
+        const gameRef = doc(db, 'games', window.updateGameId);
+
+        // Delete the game document
+        await deleteDoc(gameRef);
+
+        alert("Game deleted successfully!");
+
+        // Optionally, refresh the game list after deletion
+        const games = await fetchGamesData();
+        gameList(games);
+
+        document.getElementById('myModal').style.display = "none";
+
+        // Reset the updateGameId as the game is now deleted
+        window.updateGameId = null;
+      } catch (error) {
+        console.error(error);
+        alert("Failed to delete the game.");
+      }
+    }
+
+    async function uploadGameData() {
+      const postName = document.getElementById('postName').value.trim();
+      const postCover = document.getElementById('postCover').value.trim();
+      const postYoutube = document.getElementById('postYoutube').value.trim() || "Empty";
+      const postStatus = document.getElementById('postStatus').value.trim() || "Empty";
+      const postRating = document.getElementById('postRating').value.trim() || "Empty";
+      const postSize = document.getElementById('postSize').value.trim();
+      const postGenre = document.getElementById('postGenre').value.trim();
+      const postBk1 = document.getElementById('postBk1').value.trim() || "Empty";
+      const postBk2 = document.getElementById('postBk2').value.trim() || "Empty";
+      const postBk3 = document.getElementById('postBk3').value.trim() || "Empty";
+      const postInfo = document.getElementById('postInfo').value.trim();
+      const postLink = document.getElementById('postLink').value.trim();
+
+      // Check if any field is empty
+      if (!postName || !postCover || !postYoutube || !postStatus || !postRating ||
+        !postSize || !postGenre || !postBk1 || !postBk2 || !postBk3 || !postInfo ||
+        !postLink) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      // Prepare data for Firestore
+      const gameData = {
+        name: postName,
+        cover: postCover,
+        youtube: postYoutube,
+        status: postStatus,
+        rating: postRating,
+        size: postSize,
+        genre: postGenre,
+        bk1: postBk1,
+        bk2: postBk2,
+        bk3: postBk3,
+        info: postInfo,
+        link: postLink,
+      };
+
+      if (window.updateGame) {
+        try {
+          // Create a reference to the game document you want to update
+          const gameRef = doc(db, 'games', window.updateGameId);
+          await updateDoc(gameRef, gameData); // Update the game data
+          document.getElementById('myModal').style.display = "none";
+          alert("Game updated successfully!");
+        } catch (error) {
+          alert("Failed to update game data.");
+        }
+      } else {
+        try {
+          // Use setDoc to upload data with a new document ID
+          const newGameRef = doc(collection(db, 'games')); // Create a reference for a new document
+          await setDoc(newGameRef, gameData); // Upload the game data
+          document.getElementById('myModal').style.display = "none";
+          alert("Game uploaded successfully!");
+        } catch (error) {
+          alert("Failed to upload game data.");
+        }
+      }
+      const games = await fetchGamesData();
+      gameList(games);
+    }
+
+
+    window.updateUser = updateUser;
+    window.uploadGameData = uploadGameData;
+    window.deleteGame = deleteGame;
+  </script>
+
+  <script>
+    function createGameItem(imageSrc, title, category, rating, downloads, itemId, data) {
+      // Create container div
+      const colDiv = document.createElement('div');
+      colDiv.className = 'col-lg-3 col-sm-6';
+
+      // Create link element
+      const link = document.createElement('a');
+      link.className = 'game-link';
+      link.style.display = 'block';
+      link.onclick = function () {
+        console.log("update clicked");
+        window.updateGame = true;
+        window.updateGameId = itemId;
+        openMdl();
+        document.getElementById('postName').value = data.name;
+        document.getElementById('postCover').value = data.cover;
+        document.getElementById('postYoutube').value = data.youtube || "Empty";
+        document.getElementById('postStatus').value = data.status || "Empty";
+        document.getElementById('postRating').value = data.rating || "Empty";
+        document.getElementById('postSize').value = data.size || "";
+        document.getElementById('postGenre').value = data.genre || "";
+        document.getElementById('postBk1').value = data.bk1 || "Empty";
+        document.getElementById('postBk2').value = data.bk2 || "Empty";
+        document.getElementById('postBk3').value = data.bk3 || "Empty";
+        document.getElementById('postInfo').value = data.info || "";
+        document.getElementById('postLink').value = data.link || "";
+      }
+
+      // Create item div
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'item';
+
+      // Create img element
+      const img = document.createElement('img');
+      img.src = imageSrc;
+      img.alt = '';
+
+      // Create title and category heading
+      const heading = document.createElement('h4');
+      heading.innerHTML = `${title}<br><span>${category}</span>`;
+
+      // Create ul for rating and downloads
+      const ul = document.createElement('ul');
+      const ratingLi = document.createElement('li');
+      ratingLi.innerHTML = `<i class="fa fa-star"></i> ${rating}`;
+      const downloadsLi = document.createElement('li');
+      downloadsLi.innerHTML = `<i class="fa fa-download"></i> ${downloads}`;
+
+      // Append items to the list
+      ul.appendChild(ratingLi);
+      ul.appendChild(downloadsLi);
+
+      // Append elements to item div
+      itemDiv.appendChild(img);
+      itemDiv.appendChild(heading);
+      itemDiv.appendChild(ul);
+
+      // Append item div to link
+      link.appendChild(itemDiv);
+
+      // Append link to col div
+      colDiv.appendChild(link);
+
+      return colDiv; // Return the complete column div
+    }
+
+
+  </script>
+  <script>
+    // Show the progress circle overlay
+    function showProgressCircle() {
+      document.getElementById('progressOverlay').style.display = 'block';
+    }
+
+    // Hide the progress circle overlay
+    function hideProgressCircle() {
+      document.getElementById('progressOverlay').style.display = 'none';
+    }
+  </script>
+
+</body>
+
+</html>
