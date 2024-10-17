@@ -22,6 +22,37 @@
     <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
     <link rel="icon" href="assets/images/favicon.png">
     <script src="assets/js/firebase-init.js" type="module"></script>
+
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    // Check if the user key exists in localStorage and is valid JSON with name and email fields
+    var userData = localStorage.getItem('user');
+    if (userData) {
+        try {
+            var userObj = JSON.parse(userData);
+            if (userObj.name && userObj.email) {
+                var Tawk_API = Tawk_API || {};
+                Tawk_API.visitor = {
+                    name: userObj.name,
+                    email: userObj.email
+                };
+
+                var Tawk_LoadStart = new Date();
+                (function(){
+                    var s1 = document.createElement("script"),
+                        s0 = document.getElementsByTagName("script")[0];
+                    s1.async = true;
+                    s1.src = 'https://embed.tawk.to/670cdb7e4304e3196ad14029/1ia53iq7d';
+                    s1.charset = 'UTF-8';
+                    s1.setAttribute('crossorigin', '*');
+                    s0.parentNode.insertBefore(s1, s0);
+                })();
+            }
+        } catch (e) {
+            console.error("Invalid JSON in localStorage 'user' key", e);
+        }
+    }
+</script>
   </head>
 
 <body>
@@ -180,7 +211,7 @@
         });
       });
 
-      return JSON.stringify(gamesList, null, 2);
+      return JSON.stringify(gamesList.reverse(), null, 2);
     }
 
     // Call the function

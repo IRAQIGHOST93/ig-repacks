@@ -183,14 +183,12 @@
         );
 
         // Convert filtered results to JSON
-        const gamesJson = JSON.stringify(filteredGames, null, 2);
-        console.log(gamesJson); // Log JSON output
+        const gamesJson = JSON.stringify(filteredGames.reverse(), null, 2);
         return gamesJson; // Return the JSON data
       }
 
       // If no search keyword is provided, return all games as JSON
-      const gamesJson = JSON.stringify(gamesList, null, 2);
-      console.log(gamesJson); // Log JSON output
+      const gamesJson = JSON.stringify(gamesList.reverse(), null, 2);
       return gamesJson; // Return the JSON data
     }
 
