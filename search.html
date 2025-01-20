@@ -168,11 +168,15 @@
 
       const gamesList = [];
       gamesSnapshot.forEach((doc) => {
+        const created = doc._document.createTime.timestamp;
         gamesList.push({
+          created: created,
           id: doc.id, // Document ID
           ...doc.data() // Document data
         });
       });
+
+      gamesList.sort((a, b) => b.created - a.created);
 
       // If a search keyword is provided, filter the games list
       if (searchKeyword) {
@@ -188,7 +192,7 @@
       }
 
       // If no search keyword is provided, return all games as JSON
-      const gamesJson = JSON.stringify(gamesList.reverse(), null, 2);
+      const gamesJson = JSON.stringify(gamesList, null, 2);
       return gamesJson; // Return the JSON data
     }
 

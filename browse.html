@@ -154,13 +154,16 @@
 
     const gamesList = [];
     gamesSnapshot.forEach((doc) => {
+      const created = doc._document.createTime.timestamp;
       gamesList.push({
+        created: created,
         id: doc.id, // Document ID
         ...doc.data() // Document data
       });
     });
 
-    return JSON.stringify(gamesList.reverse(), null, 2);
+    gamesList.sort((a, b) => b.created - a.created);
+    return JSON.stringify(gamesList, null, 2);
   }
 
   // Call the function

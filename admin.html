@@ -487,12 +487,15 @@
 
       const gamesList = [];
       gamesSnapshot.forEach((doc) => {
+        const created = doc._document.createTime.timestamp;
         gamesList.push({
+          created: created,
           id: doc.id, // Document ID
           ...doc.data() // Document data
         });
       });
 
+      gamesList.sort((a, b) => b.created - a.created);
       return gamesList; // Return the games list
     }
 
